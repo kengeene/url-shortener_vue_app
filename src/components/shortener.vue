@@ -1,35 +1,31 @@
 <template>
   <div class="container">
-    <p class="textBox">Insert your URL here:</p>
-    <input v-model="originalURL" class="textBox" />
-    <button class="textBox" @click="fetchUrl">Convert URL</button>
-    <span class="textBox"
-      ><a :href="shortenedURL" target="blank">{{ shortenedURL }}</a></span
-    >
+    <p>Insert your URL here:</p>
+    <input v-model="originalURL" class="textbox" />
+    <button v-loading="loading" @click="fetchUrl">Convert URL</button>
+    <span class="results">
+      <a :href="shortenedURL" target="blank" class="result-test">{{ shortenedURL }}</a>
+    </span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    age: {
-      type: Number,
-      default: 2,
-    },
-  },
   data() {
     return {
       originalURL: '',
       shortenedURL: '',
+      loading: false,
     }
   },
   methods: {
     async fetchUrl() {
+      this.loading = true
       const url = new URL('https://t.ly/api/v1/link/shorten')
 
       const params = {
-        api_token: 'V4BVn8jdbCCdWhvqDepu9kvcf0p7kjJQv3bHhsz4eF3vJkhhNrZ71Z4yumuq',
+        api_token: 'f4h4fA9V6fMNPGCy8Oea6GQTgiIHSbat5jJoBXDAUV62TU2BbKU9hiUzAgsP',
       }
       Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]))
 
@@ -51,6 +47,7 @@ export default {
       }).then((response) => response.json())
 
       this.shortenedURL = short_url
+      this.loading = false
     },
   },
 }
@@ -61,9 +58,12 @@ export default {
 .container {
   margin: 0 auto;
   text-align: center;
+  width: 100%;
 }
-.textBox {
+.textbox {
+  margin: 20px;
+}
+.results {
   display: block;
-  margin: 0;
 }
 </style>
